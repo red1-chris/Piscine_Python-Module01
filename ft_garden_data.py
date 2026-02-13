@@ -8,7 +8,8 @@ class Plant:
 
     def __str__(self) -> str:
         return f"{self.name}: {self.height}cm, {self.age} days old"
-        
+
+
 def main():
     rose = Plant("Rose", 25, 30)
     sunflower = Plant("Sunflower", 80, 45)
