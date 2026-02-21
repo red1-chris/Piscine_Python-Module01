@@ -22,7 +22,7 @@ class Plant:
         self.is_blooming = True
         self._height += 1
 
-    def __str__(self):
+    def __str__(self) -> str:
         base = f"{self.name}: {self.get_height()}cm"
         return f"{base} {self.height_error}".strip()
         
@@ -36,7 +36,7 @@ class FloweringPlant(Plant):
             return "(blooming)"
         return ""
         
-    def __str__(self):
+    def __str__(self) -> str:
         status = self.blooming()
         res = f"{super().__str__()}, {self.color} flower {self.blooming()}"
         return res.strip()
@@ -55,7 +55,7 @@ class PrizeFlower(FloweringPlant):
         super().bloom()
         self.prizepoint()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{super().__str__()}, Prize points: {self.prize}"
 
 class GardenManager:
@@ -69,12 +69,6 @@ class GardenManager:
         else:
             print(f"Addition denied: {plant.name} on account of {plant._height}cm {plant.height_error}")
 
-    def total_points(self) -> int:
-        total = 0
-        for plant in PrizeFlower:
-            total += plant.prize
-        return total
-    
     @classmethod
     def create_garden_network(cls) -> list['GardenManager']:
         alice_garden = cls("Alice")
@@ -86,7 +80,13 @@ class GardenManager:
         alice_garden.add_plant(rose)
         alice_garden.add_plant(sunflower)
         return [alice_garden, bob_garden]
-        
+    
+    def garden_scores(self) -> str:
+        total_height = 0
+        for plant in self.plants:
+            total_height += plant._height
+        return total_height
+
     class GardenStats:
         @staticmethod
         def height_valid(plant) -> str:
@@ -109,12 +109,9 @@ class GardenManager:
             return (f"Plants added: {total}, Total growth: {total}cm\n"
                     f"Plant types: {counts['regular']} regular, "
                     f"{counts['flowering']} flowering, {counts['prize']} prize flowers")
-        
-        @staticmethod
-        def winner(plants) -> str:
-            
 
-def main():
+
+def main() -> None:
     print("=== Garden Management System Demo ===\n")
     gardens = GardenManager.create_garden_network()
     alice_garden = gardens[0]
@@ -134,6 +131,7 @@ def main():
     for _ in range(12):
         sunflower.bloom()
     print(f"After Growth: {sunflower}\n")
+    print("* Gardens: *")
     for garden in gardens:
         print(f"Gardener: {garden.owner}")
         for p in garden.plants:
@@ -143,7 +141,8 @@ def main():
         stats = GardenManager.GardenStats.count_by_type(garden.plants)
         print(f"\n{garden.owner}'s Results:")
         print(stats.strip())
-        print("\n")
+        print(f"Garden score: {garden.garden_scores()}\n")
+
 
 if __name__ == "__main__":
     main()
