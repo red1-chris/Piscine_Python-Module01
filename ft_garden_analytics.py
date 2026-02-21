@@ -75,7 +75,6 @@ class GardenManager:
             total += plant.prize
         return total
     
-    def winner()
     @classmethod
     def create_garden_network(cls) -> list['GardenManager']:
         alice_garden = cls("Alice")
@@ -110,8 +109,9 @@ class GardenManager:
             return (f"Plants added: {total}, Total growth: {total}cm\n"
                     f"Plant types: {counts['regular']} regular, "
                     f"{counts['flowering']} flowering, {counts['prize']} prize flowers")
+        
         @staticmethod
-        def winner(plants)
+        def winner(plants) -> str:
             
 
 def main():
@@ -147,5 +147,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# faire attention a ce que le nombre de plante n'augmente pas si une height est rejetée
