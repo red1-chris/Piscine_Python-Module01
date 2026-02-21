@@ -76,9 +76,14 @@ class GardenManager:
         oak = Plant("Oak Tree", 101)
         rose = FloweringPlant("Rose", 26, "red")
         sunflower = PrizeFlower("Sunflower", 28, "yellow", 10)
+        cactus = Plant("Cactus", 18)
+
+        tulipe = FloweringPlant("Tulip", 30, "orange")
         alice_garden.add_plant(oak)
         alice_garden.add_plant(rose)
         alice_garden.add_plant(sunflower)
+        bob_garden.add_plant(cactus)
+        bob_garden.add_plant(tulipe)
         return [alice_garden, bob_garden]
     
     def garden_scores(self) -> str:
@@ -115,12 +120,9 @@ def main() -> None:
     print("=== Garden Management System Demo ===\n")
     gardens = GardenManager.create_garden_network()
     alice_garden = gardens[0]
-    cactus = Plant("Cactus", 18)
+    bob_garden = gardens[1]
     cow = PrizeFlower("Cow", -120, "blue", 0)
-    tulipe = FloweringPlant("Tulip", 30, "orange")
-    gardens[1].add_plant(cactus)
-    gardens[1].add_plant(cow)
-    gardens[1].add_plant(tulipe)
+    bob_garden.add_plant(cow)
     rose = alice_garden.plants[1]
     print("\n* Blooming Flowers: *")
     print(f"Before Growth: {rose}")
@@ -136,12 +138,17 @@ def main() -> None:
         print(f"Gardener: {garden.owner}")
         for p in garden.plants:
             valid = GardenManager.GardenStats.height_valid(p)
-            print(f" > {p} | {valid}")
-
+            print(f" > {p}")
+        print(f"{valid}")
         stats = GardenManager.GardenStats.count_by_type(garden.plants)
         print(f"\n{garden.owner}'s Results:")
         print(stats.strip())
         print(f"Garden score: {garden.garden_scores()}\n")
+    if alice_garden.garden_scores() > bob_garden.garden_scores():
+        print("Alice's garden wins!!!")
+    else:
+        print("Bob's garden wins!!!")
+
 
 
 if __name__ == "__main__":
