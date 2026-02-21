@@ -4,6 +4,7 @@ class Plant:
     def __init__(self, name: str, height: int) -> None:
         self.name = name
         self._height = 0
+        self.height_error = ""
         self.set_height(height)
         self.is_blooming = False
 
@@ -14,15 +15,16 @@ class Plant:
         if height >= 0:
             self._height = height
         else:
-            print(f"Invalid operation attempted: height "
-                  f"{height}cm [REJECTED]")
+            self._height = height
+            self.height_error = " [REJECTED]"
             
     def bloom(self) -> None:
         self.is_blooming = True
         self._height += 1
 
     def __str__(self):
-        return f"{self.name}: {self.get_height()}cm"
+        base = f"{self.name}: {self.get_height()}cm"
+        return f"{base} {self.height_error}".strip()
         
 class FloweringPlant(Plant):
     def __init__(self, name, height, color) -> None:
@@ -36,7 +38,8 @@ class FloweringPlant(Plant):
         
     def __str__(self):
         status = self.blooming()
-        return f"{super().__str__()}, {self.color} flowers {self.blooming()}"
+        res = f"{super().__str__()}, {self.color} flower {self.blooming()}"
+        return res.strip()
 
 class PrizeFlower(FloweringPlant):
     def __init__(self, name, height, color, prize) -> None:
@@ -61,15 +64,25 @@ class GardenManager:
         self.plants = []
 
     def add_plant(self, plant: Plant) -> None:
-        self.plants.append(plant)
+        if "True" in self.GardenStats.height_valid(plant):
+            self.plants.append(plant)
+        else:
+            print(f"Addition denied: {plant.name} on account of {plant._height}cm {plant.height_error}")
 
+    def total_points(self) -> int:
+        total = 0
+        for plant in PrizeFlower:
+            total += plant.prize
+        return total
+    
+    def winner()
     @classmethod
     def create_garden_network(cls) -> list['GardenManager']:
         alice_garden = cls("Alice")
         bob_garden = cls("Bob")
         oak = Plant("Oak Tree", 101)
         rose = FloweringPlant("Rose", 26, "red")
-        sunflower = PrizeFlower("Sunflower", 51, "yellow", 10)
+        sunflower = PrizeFlower("Sunflower", 28, "yellow", 10)
         alice_garden.add_plant(oak)
         alice_garden.add_plant(rose)
         alice_garden.add_plant(sunflower)
@@ -97,11 +110,42 @@ class GardenManager:
             return (f"Plants added: {total}, Total growth: {total}cm\n"
                     f"Plant types: {counts['regular']} regular, "
                     f"{counts['flowering']} flowering, {counts['prize']} prize flowers")
-
+        @staticmethod
+        def winner(plants)
+            
 
 def main():
-    print("=== Garden Management System Demo ===")
+    print("=== Garden Management System Demo ===\n")
+    gardens = GardenManager.create_garden_network()
+    alice_garden = gardens[0]
+    cactus = Plant("Cactus", 18)
+    cow = PrizeFlower("Cow", -120, "blue", 0)
+    tulipe = FloweringPlant("Tulip", 30, "orange")
+    gardens[1].add_plant(cactus)
+    gardens[1].add_plant(cow)
+    gardens[1].add_plant(tulipe)
+    rose = alice_garden.plants[1]
+    print("\n* Blooming Flowers: *")
+    print(f"Before Growth: {rose}")
+    rose.bloom()
+    print(f"After Growth: {rose}\n")
+    sunflower = alice_garden.plants[2]
+    print(f"Before Growth: {sunflower}")
+    for _ in range(12):
+        sunflower.bloom()
+    print(f"After Growth: {sunflower}\n")
+    for garden in gardens:
+        print(f"Gardener: {garden.owner}")
+        for p in garden.plants:
+            valid = GardenManager.GardenStats.height_valid(p)
+            print(f" > {p} | {valid}")
 
+        stats = GardenManager.GardenStats.count_by_type(garden.plants)
+        print(f"\n{garden.owner}'s Results:")
+        print(stats.strip())
+        print("\n")
 
+if __name__ == "__main__":
+    main()
 
-    print(GardenStats.height_valid(rose))
+# faire attention a ce que le nombre de plante n'augmente pas si une height est rejetée
