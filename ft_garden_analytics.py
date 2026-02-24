@@ -17,15 +17,19 @@ class Plant:
         else:
             self._height = height
             self.height_error = " [REJECTED]"
-            
+
     def bloom(self) -> None:
         self.is_blooming = True
         self._height += 1
 
+    def get_type_category(self) -> str:
+        return "regular"
+
     def __str__(self) -> str:
         base = f"{self.name}: {self.get_height()}cm"
         return f"{base} {self.height_error}".strip()
-        
+
+
 class FloweringPlant(Plant):
     def __init__(self, name, height, color) -> None:
         super().__init__(name, height)
@@ -35,11 +39,14 @@ class FloweringPlant(Plant):
         if self.is_blooming:
             return "(blooming)"
         return ""
-        
+
+    def get_type_category(self) -> str:
+        return "flowering"
+
     def __str__(self) -> str:
-        status = self.blooming()
         res = f"{super().__str__()}, {self.color} flower {self.blooming()}"
         return res.strip()
+
 
 class PrizeFlower(FloweringPlant):
     def __init__(self, name, height, color, prize) -> None:
@@ -55,8 +62,12 @@ class PrizeFlower(FloweringPlant):
         super().bloom()
         self.prizepoint()
 
+    def get_type_category(self) -> str:
+        return "prize"
+
     def __str__(self) -> str:
         return f"{super().__str__()}, Prize points: {self.prize}"
+
 
 class GardenManager:
     def __init__(self, owner_name: str):
@@ -67,7 +78,8 @@ class GardenManager:
         if "True" in self.GardenStats.height_valid(plant):
             self.plants.append(plant)
         else:
-            print(f"Addition denied: {plant.name} on account of {plant._height}cm {plant.height_error}")
+            print(f"Addition denied: {plant.name} on account of "
+                  f"height: '{plant._height}cm' {plant.height_error}")
 
     @classmethod
     def create_garden_network(cls) -> list['GardenManager']:
@@ -85,7 +97,7 @@ class GardenManager:
         bob_garden.add_plant(cactus)
         bob_garden.add_plant(tulipe)
         return [alice_garden, bob_garden]
-    
+
     def garden_scores(self) -> str:
         total_height = 0
         for plant in self.plants:
@@ -96,24 +108,21 @@ class GardenManager:
         @staticmethod
         def height_valid(plant) -> str:
             if plant._height >= 0:
-                return (f"Height validation test: True")
+                return ("Height validation test: True")
             else:
-                return (f"Height validation test: False")
+                return ("Height validation test: False")
 
         @staticmethod
         def count_by_type(plants: list) -> str:
             counts = {"regular": 0, "flowering": 0, "prize": 0}
             for plant in plants:
-                if isinstance(plant, PrizeFlower):
-                    counts["prize"] += 1
-                elif isinstance(plant, FloweringPlant):
-                    counts["flowering"] += 1
-                elif isinstance(plant, Plant):
-                    counts["regular"] += 1
+                category = plant.get_type_category()
+                counts[category] += 1
             total = sum(counts.values())
             return (f"Plants added: {total}, Total growth: {total}cm\n"
                     f"Plant types: {counts['regular']} regular, "
-                    f"{counts['flowering']} flowering, {counts['prize']} prize flowers")
+                    f"{counts['flowering']} flowering, {counts['prize']} "
+                    "prize flowers")
 
 
 def main() -> None:
@@ -136,9 +145,9 @@ def main() -> None:
     print("* Gardens: *")
     for garden in gardens:
         print(f"Gardener: {garden.owner}")
-        for p in garden.plants:
-            valid = GardenManager.GardenStats.height_valid(p)
-            print(f" > {p}")
+        for plant in garden.plants:
+            valid = GardenManager.GardenStats.height_valid(plant)
+            print(f" > {plant}")
         print(f"{valid}")
         stats = GardenManager.GardenStats.count_by_type(garden.plants)
         print(f"\n{garden.owner}'s Results:")
@@ -148,7 +157,6 @@ def main() -> None:
         print("Alice's garden wins!!!")
     else:
         print("Bob's garden wins!!!")
-
 
 
 if __name__ == "__main__":

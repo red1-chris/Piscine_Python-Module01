@@ -8,8 +8,6 @@ class Plant:
 
 # Child classes :
 class Flower(Plant):
-    '''need to redefine parent's class var'''
-    '''super() '''
     def __init__(self, name, height, age, color) -> None:
         super().__init__(name, height, age)
         self.color = color

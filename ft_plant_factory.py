@@ -7,6 +7,13 @@ class Plant:
     def __str__(self) -> str:
         return f"Created: {self.name} ({self.height}cm, {self.age} days)"
 
+    def create_plants(data_list: list) -> list:
+        created_plants = []
+        for data in data_list:
+            new_plant = Plant(data[0], data[1], data[2])
+            created_plants.append(new_plant)
+        return created_plants
+
 
 def main():
     creations = [
@@ -16,12 +23,10 @@ def main():
         ["Sunflower", 80, 45],
         ["Fern", 15, 120]
     ]
-    created_plants = []
     print("=== Plant Factory Output ===")
-    for plant in creations:
-        new_plant = Plant(plant[0], plant[1], plant[2])
-        created_plants.append(new_plant)
-        print(new_plant)
+    created_plants = Plant.create_plants(creations)
+    for plant in created_plants:
+        print(plant)
     print(f"\nTotal plants created: {len(created_plants)}")
 
 

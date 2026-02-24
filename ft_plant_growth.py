@@ -4,11 +4,13 @@ class Plant:
         self.height = height
         self.age = age
 
-    def __str__(self) -> str:
+    def get_info(self) -> str:
         return f"{self.name}: {self.height}cm, {self.age} days old"
 
-    def growth(self) -> None:
+    def growing(self) -> None:
         self.height += 1
+
+    def aging(self) -> None:
         self.age += 1
 
 
@@ -20,8 +22,9 @@ def main():
     for i in range(1, 8):
         print(f"=== Day {i} ===")
         for plant in garden:
-            plant.growth()
-            print(plant)
+            plant.growing()
+            plant.aging()
+            print(plant.get_info())
     print(f"Growth this week: +{i - 1}cm")
 
 

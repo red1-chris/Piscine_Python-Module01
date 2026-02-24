@@ -4,9 +4,6 @@ class Plant:
         self.__height = height
         self.__age = age
 
-    def __str__(self) -> str:
-        return f"{self.name}: {self.__height}cm, {self.__age} days old"
-
     def get_height(self) -> int:
         return self.__height
 
